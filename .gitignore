@@ -1,3 +1,7 @@
+# Other miscellany 
+*.tmp
+make
+
 # Compiled Object files
 *.slo
 *.lo
