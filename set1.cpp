@@ -36,7 +36,7 @@ std::string charToHex(char c)
 	return result;
 }
 
-int countAlphaNums(const unsigned char * in)
+int countAlphaNums(const char * in)
 {
 	unsigned int count = 0; 
 	while (*in != '\0')
@@ -58,7 +58,7 @@ int countAlphaNums(const unsigned char * in)
 //	convert hex to base64
 // ------------------------------------------------------------
 
-std::string hexToB64(const unsigned char * hex, unsigned int len)
+std::string hexToB64(const char * hex, unsigned int len)
 {
 	static const std::string b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
     std::string result = "";
@@ -131,7 +131,7 @@ std::string hexToB64(const unsigned char * hex, unsigned int len)
 //	produces their XOR combination
 // ------------------------------------------------------------
 
-std::string fxor(const unsigned char * in, const unsigned char * key, unsigned int len)
+std::string fxor(const char * in, const char * key, unsigned int len)
 {
 	std::string result = "";
 
@@ -150,7 +150,7 @@ std::string fxor(const unsigned char * in, const unsigned char * key, unsigned i
 // 	  single-byte XOR
 // ------------------------------------------------------------
 
-std::string sbxor(const unsigned char * in, unsigned char key, unsigned int len)
+std::string sbxor(const char * in, char key, unsigned int len)
 {
 	std::string decoded = "";
 	while (*in != '\0')
@@ -177,11 +177,12 @@ std::string sbxor(const unsigned char * in, unsigned char key, unsigned int len)
 //		repeating-key XOR
 // ------------------------------------------------------------
 /*
-	@param in sequence to be encrypted
-	@param key key sequence
+	@param in character sequence to be encrypted
+	@param key hex key sequence
 	@param len length of the key sequence
+	@return decoded string
 */
-std::string rkxor(const unsigned char * in, const unsigned char * key, unsigned int len)
+std::string rkxor(const char * in, const char * key, unsigned int len)
 {
 	std::string decoded = "";
 	unsigned int count = 0;
@@ -196,4 +197,38 @@ std::string rkxor(const unsigned char * in, const unsigned char * key, unsigned 
 		}
 	}
 	return decoded;
+}
+
+// ------------------------------------------------------------
+//		challenge 6
+//		break repeating-key XOR
+// ------------------------------------------------------------
+/*
+	@param *a character sequence
+	@param *b character sequence
+	@param n length of the sequences
+	@return hammering distance between the two sequences
+*/
+int hamming(const char * a, const char * b, unsigned int n)
+{
+	std::string xord = "";
+	for (unsigned i = 0; i < n; i++)
+	{
+		xord += *(a + i) ^ *(b + i);
+	}
+
+	int hammingDist = 0;
+	for (unsigned i = 0; i < xord.length(); i++)
+	{
+
+		for (unsigned j = 1; j <= 128; j*=2)
+		{
+			if ((xord[i] & j) > 0)
+			{
+				hammingDist++;
+			}
+
+		}
+	}
+	return hammingDist;
 }

@@ -9,7 +9,7 @@ int main()
 {
     #if TEST == 1
     const string hex = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
-    string encoded = hexToB64(reinterpret_cast<const unsigned char*>(hex.c_str()), hex.length());
+    string encoded = hexToB64(hex.c_str(), hex.length());
 
     cout << encoded << endl;
     const string check = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t";
@@ -26,9 +26,7 @@ int main()
     const string key = "686974207468652062756c6c277320657965";
     const string check = "746865206b696420646f6e277420706c6179";
 
-    string fxord = fxor(reinterpret_cast<const unsigned char*>(hex.c_str()), 
-        reinterpret_cast<const unsigned char*>(key.c_str()), 
-        key.length());
+    string fxord = fxor(hex.c_str(), key.c_str(), key.length());
     cout << fxord << endl << check << endl;
     for (unsigned i = 0; i < check.length() && i < hex.length(); i++)
     {
@@ -46,11 +44,11 @@ int main()
     int alphanums = 0, keyIdx = 0;
     for (unsigned i = 0; i < key.length(); i++)
     {
-        string s = sbxor(reinterpret_cast<const unsigned char*>(hex.c_str()), key[i], hex.length());
-        if (alphanums < countAlphaNums(reinterpret_cast<const unsigned char*>(s.c_str())))
+        string s = sbxor(hex.c_str(), key[i], hex.length());
+        if (alphanums < countAlphaNums(s.c_str()))
         {
             decoded = s;
-            alphanums = countAlphaNums(reinterpret_cast<const unsigned char*>(s.c_str()));
+            alphanums = countAlphaNums(s.c_str());
             keyIdx = i;
         }
     }
@@ -75,11 +73,11 @@ int main()
     {
         for (unsigned j = 0; j < len; j++)
         {
-            string s = sbxor(reinterpret_cast<const unsigned char*>(hex[j].c_str()), key[i], hex[j].length());
-            if (alphanums < countAlphaNums(reinterpret_cast<const unsigned char*>(s.c_str())))
+            string s = sbxor(hex[j].c_str(), key[i], hex[j].length());
+            if (alphanums < countAlphaNums(s.c_str()))
             {
                 decoded = s;
-                alphanums = countAlphaNums(reinterpret_cast<const unsigned char*>(s.c_str()));
+                alphanums = countAlphaNums(s.c_str());
                 keyIdx = i;
                 row = j;
             }
@@ -94,10 +92,15 @@ int main()
     
     for (unsigned int i = 0; i < 2; i++)
     {
-        string enc = rkxor(reinterpret_cast<const unsigned char*>(message[i].c_str()), 
-            reinterpret_cast<const unsigned char*>(key.c_str()), 3);
+        string enc = rkxor(message[i].c_str(), key.c_str(), 3);
         cout << enc << endl;
     }
+
+
+    #elif TEST == 6
+    string a = "this is a test";
+    string b = "wokka wokka!!!";
+    cout << "got: " << hamming(a.c_str(), b.c_str(), 14) << ", expected: " << 37;
 
     #endif
     return 0;
