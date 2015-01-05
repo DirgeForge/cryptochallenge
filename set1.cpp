@@ -53,6 +53,57 @@ int countAlphaNums(const char * in)
 	return count;
 }
 
+std::string b64ToHex(const char * cstr)
+{
+	std::string result = "";
+	while (*cstr != '\0')
+	{
+		char asciiBuf[] = {0, 0, 0};
+		char b64Buf[] = {0, 0, 0, 0};
+
+		// decode 4 b64 chars at a time and hope nothing breaks
+		for (int i = 0; i < 4; i++)
+		{
+			if ('A' <= *cstr && *cstr <= 'Z')
+			{
+				b64Buf[i] = (*cstr - 'A');
+			}
+			else if ('a' <= *cstr && *cstr <= 'z')
+			{
+				b64Buf[i] = (*cstr - 'a') + 26;
+			}
+			else if ('0' <= *cstr && *cstr <= '9')
+			{
+				b64Buf[i] = (*cstr - '0') + 52;
+			}
+			else if ('+' == *cstr)
+			{
+				b64Buf[i] = 62;
+			}
+			else if ('/' == *cstr)
+			{
+				b64Buf[i] = 63;
+			}
+			cstr++;
+		}
+
+		asciiBuf[0] = b64Buf[0] << 2;
+		asciiBuf[0] += b64Buf[1] >> 6;
+		asciiBuf[1] = b64Buf[1] << 4; 
+		asciiBuf[1] += b64Buf[2] >> 2;
+		asciiBuf[2] = b64Buf[2] << 6;
+		asciiBuf[2] += b64Buf[3]; 
+
+		for (int i = 0; i < 3; i++)
+		{
+			result += decToHex(asciiBuf[i] >> 4);
+			result += decToHex(asciiBuf[i] & 0x0f);
+		}
+	}
+	return result;
+}
+
+
 // ------------------------------------------------------------
 //	challenge 1 
 //	convert hex to base64
@@ -72,8 +123,10 @@ std::string hexToB64(const char * hex, unsigned int len)
         // combine two hexes into one index
         if (len > 1)
         {
-            b16Buf[i++] = (hexToDec(*hex++) << 4) + hexToDec(*hex++);
+            b16Buf[i] = hexToDec(*hex++) << 4;
+            b16Buf[i] += hexToDec(*hex++);
             len -= 2;
+            i++;
         }
         else
         {
@@ -166,7 +219,7 @@ std::string sbxor(const char * in, char key, unsigned int len)
 }
 
 // ------------------------------------------------------------
-// 	  challenge 3
+// 	  challenge 4
 // 	  single-byte XOR
 // ------------------------------------------------------------
 

@@ -7,6 +7,7 @@
 int hexToDec(char c);
 char decToHex(int n);
 int countAlphaNums(const char *);
+std::string b64ToHex(const char *);
 
 /* challenge 1 */
 std::string hexToB64(const char*, unsigned int);

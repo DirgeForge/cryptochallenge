@@ -1,8 +1,9 @@
 #include "set1.h"
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 
-#define TEST 5
+#define TEST 6
 
 using namespace std;
 int main()
@@ -98,9 +99,33 @@ int main()
 
 
     #elif TEST == 6
+    /* // this should pass
     string a = "this is a test";
     string b = "wokka wokka!!!";
     cout << "got: " << hamming(a.c_str(), b.c_str(), 14) << ", expected: " << 37;
+    */
+
+    fstream f("6.txt");
+    string txt = "";
+    while (f.good())
+    {
+        string s; 
+        f >> s;
+        txt += b64ToHex(s.c_str());
+    }
+    double dist = 320;
+    int keysize;
+    for (int i = 2; i <= 40; i++)
+    {
+        double ham = hamming(txt.substr(0, i).c_str(), txt.substr(i, i).c_str(), i) / static_cast<double>(i);
+        if (ham < dist)
+        {
+            dist = ham;
+            keysize = i;
+        }
+
+    }
+    cout << showpoint << dist << " " << keysize;
 
     #endif
     return 0;
