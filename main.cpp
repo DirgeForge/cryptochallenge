@@ -9,16 +9,19 @@ using namespace std;
 int main()
 {
     #if TEST == 1
-    const string hex = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
+    const string hex = 
+    "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
     string encoded = hexToB64(hex.c_str(), hex.length());
 
     cout << encoded << endl;
-    const string check = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t";
+    const string check = 
+    "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t";
     for (unsigned i = 0; i < check.length() && i < hex.length(); i++)
     {
         if (check[i] != encoded[i])
         {
-            cout << "Mismatch found at index " << i << "(found " << hex[i] << "; expected " << encoded[i] << ")" << endl;
+            cout << "Mismatch found at index " << i 
+            << "(found " << hex[i] << "; expected " << encoded[i] << ")" << endl;
         }
     }
 
@@ -33,7 +36,8 @@ int main()
     {
         if (check[i] != fxord[i])
         {
-            cout << "Mismatch found at index " << i << "(found " << fxord[i] << "; expected " << check[i] << ")" << endl;
+            cout << "Mismatch found at index " << i 
+            << "(found " << fxord[i] << "; expected " << check[i] << ")" << endl;
         }
     }
 
@@ -88,7 +92,8 @@ int main()
 
 
     #elif TEST == 5
-    const string message[] = {"Burning 'em, if you ain't quick and nimble", "I go crazy when I hear a cymbal"};
+    const string message[] = 
+    {"Burning 'em, if you ain't quick and nimble", "I go crazy when I hear a cymbal"};
     const string key = "ICE";
     
     for (unsigned int i = 0; i < 2; i++)
@@ -117,7 +122,8 @@ int main()
     int keysize;
     for (int i = 2; i <= 40; i++)
     {
-        double ham = hamming(txt.substr(0, i).c_str(), txt.substr(i, i).c_str(), i) / static_cast<double>(i);
+        double ham = 
+        hamming(txt.substr(0, i).c_str(), txt.substr(i, i).c_str(), i) / static_cast<double>(i);
         if (ham < dist)
         {
             dist = ham;
